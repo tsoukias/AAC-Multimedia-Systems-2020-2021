@@ -33,7 +33,7 @@ bval = B219a(:,5);
 i=2;
 j=0;
 % Preparation of function's input data
-index = 27;
+index = 10;
 frameT(:,1) = frame_W(index,:,1);
 frameType = AACSeq2(index).frameType;
 frameTprev1(:,1) = frame_W(index-1,:,1);
@@ -58,18 +58,6 @@ if isequal(frameType, 'ESH')
     f_pred = 2*f1 - f2;
     %Step 4: Calculation of predictability matrix c
     c = sqrt( (r.*cos(f) - r_pred.*cos(f_pred) ).^2 +( r.*sin(f) - r_pred.*sin(f_pred) ).^2 ) ./ ( r + abs(r_pred) );
-    %Step 5: Calculation of eb and eb
-    b = length(B219b);
-    w_low = B219b(:,2);
-    w_high = B219b(:,3);
-    eb = zeros(b,8);
-    cb = zeros(b,8);
-    for n = 1:8
-        for i = 1:b
-            eb(i,n) = sum( r(w_low(i)+1:w_high(i)+1).^2);
-            cb(i,n) = sum( c(w_low(i)+1:w_high(i)+1).*r(w_low(i)+1:w_high(i)+1).^2);
-        end
-    end
 else
     %Step 2: Calculation of complex magnitudes and phases
     [r,f] = LONG_FFT(frameT);
@@ -80,15 +68,10 @@ else
     f_pred = 2*f1 - f2;
     %Step 4: Calculation of predictability matrix c
     c = sqrt( (r.*cos(f) - r_pred.*cos(f_pred) ).^2 +( r.*sin(f) - r_pred.*sin(f_pred) ).^2 ) ./ ( r + abs(r_pred) );
-    %Step 5: Calculation of eb and eb
     b = length(B219a);
     w_low = B219a(:,2);
     w_high = B219a(:,3);
-    eb = zeros(b,1);
-    cb = zeros(b,1);
     for i = 1:b
-        eb(i,1) = sum( r(w_low(i)+1:w_high(i)+1).^2);
-        cb(i,1) = sum( c(w_low(i)+1:w_high(i)+1).*r(w_low(i)+1:w_high(i)+1).^2);
-    end
+        e(i) = sum( r(w_low+
 end
 
