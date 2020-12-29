@@ -32,8 +32,8 @@ B219b = B219.B219b;
 bval = B219a(:,5);
 i=2;
 j=0;
-% Preparation of function's input data
-index = 60;
+%% Preparation of function's input data
+index = 27;
 frameT(:,1) = frame_W(index,:,1);
 frameType = AACSeq2(index).frameType;
 frameTprev1(:,1) = frame_W(index-1,:,1);
@@ -84,19 +84,36 @@ if isequal(frameType, 'ESH')
         end
     end
     %Calculation of cb and en
-    for n = 1:8
-        cb(1:b,n) = ct(1:b,n)./ecb(1:b,n);
-    end
-    en = zeros(b,8);
-    norm_factor = zeros(b,8);
-    for n = 1:8
+    cb(1:b,1:8) = ct(1:b,1:8)./ecb(1:b,1:8);
+    en = zeros(b,1);
+    norm_factor = zeros(b,8); 
+    for n=1:8
         for j=1:b
             for i=1:bb
-                norm_factor(i,n) = norm_factor(i,n) + spreadingfun(i,j,bval);
+                norm_factor(j,n) = norm_factor(j,n) + spreadingfun(i,j,bval);
             end
             en(j,n) = ecb(j,n)./norm_factor(j,n);
         end
     end
+    %Step 7: Calculation of tb
+    tb(1:b,1:8) = -0.299 - 0.43.*log(cb(1:b,1:8));
+    %Step 8: Calculation of SNR
+    NMT = 6;
+    TMN = 18;
+    SNR(1:b,1:8) = tb(1:b,1:8)*TMN + (1-tb(1:b,1:8))*NMT;
+    %Step 8: Calculation of bc
+    bc(1:b,1:8) = 10.^(-SNR(1:b,1:8)/10);
+    %Step 9: Calculation of nb
+    nb(1:b,1:8) = en(1:b,1:8).*bc(1:b,1:8);
+    %Step 9: Calculation of npart
+    qthr(:,1) = B219b(:,6);
+    qthr_hat = zeros(b,8);
+    for n=1:8
+        qthr_hat(1:b,n) = eps()*128*10.^(qthr(1:b,1)/10);
+    end
+    npart(1:b,1:8) = max(nb(1:b,1:8),qthr_hat(1:b,1:8));
+    %Step 10: Calculation of SMR
+    SMR(1:b,1:8) = eb(1:b,1:8)./npart(1:b,1:8);
     
 else
     %Step 2: Calculation of complex magnitudes and phases
@@ -106,7 +123,7 @@ else
     %Step 3: Calculations of predictions for r and f
     r_pred = 2*r1 - r2;
     f_pred = 2*f1 - f2;
-    %Step 4: Calculation of predictability matrix c
+    %Step 4: Calculation of unpredictability measure c
     c = sqrt( (r.*cos(f) - r_pred.*cos(f_pred) ).^2 +( r.*sin(f) - r_pred.*sin(f_pred) ).^2 ) ./ ( r + abs(r_pred) );
     %Step 5: Calculation of eb and eb
     b = length(B219a);
@@ -140,7 +157,19 @@ else
         en(j,1) = ecb(j,1)./norm_factor(j,1);
     end
     %Step 7: Calculation of tb
-    
-    tb(1:b) = -0.299 - 0.43.*log(cb(1:b));
+    tb(1:b,1) = -0.299 - 0.43.*log(cb(1:b));
+    %Step 8: Calculation of SNR
+    NMT = 6;
+    TMN = 18;
+    SNR(1:b,1) = tb(1:b)*TMN + (1-tb(1:b))*NMT;
+    %Step 8: Calculation of bc
+    bc(1:b,1) = 10.^(-SNR(1:b)/10);
+    %Step 9: Calculation of nb
+    nb(1:b,1) = en(1:b).*bc(1:b);
+    %Step 9: Calculation of npart
+    qthr(:,1) = B219a(:,6);
+    qthr_hat(1:b,1) = eps()*1024*10.^(qthr(1:b)/10);
+    npart(1:b,1) = max(nb(1:b),qthr_hat(1:b));
+    %Step 10: Calculation of SMR
+    SMR(1:b,1) = eb(1:b)./npart(1:b);
 end
-

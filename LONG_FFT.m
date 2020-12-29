@@ -10,7 +10,7 @@ function [r,f] = LONG_FFT(frameT)
 %of the FFT transformation of the long frame
 S = frameT;
 N = length(S);
-hann_win(1:N,1) = 0.5 - 0.5*(cos(pi/(N)*((1:N)+0.5)));
+hann_win(1:N,1) = 0.5 - 0.5*(cos(pi/(N)*((0:N-1)+0.5)));
 Sw = S.*hann_win;
 Sw_fft = fft(Sw);
 r(1:1024,1) = abs(Sw_fft(1:1024));
