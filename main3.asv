@@ -41,7 +41,7 @@ frameTprev2(:,1) = frame_W(index-2,:,1);
 
 %% Process for Long Frame
 % Step1
-x = spreadingfun(i,j,bval);
+
 
 
 
@@ -58,6 +58,41 @@ if isequal(frameType, 'ESH')
     f_pred = 2*f1 - f2;
     %Step 4: Calculation of predictability matrix c
     c = sqrt( (r.*cos(f) - r_pred.*cos(f_pred) ).^2 +( r.*sin(f) - r_pred.*sin(f_pred) ).^2 ) ./ ( r + abs(r_pred) );
+    %Step 5: Calculation of eb and eb
+    b = length(B219b);
+    w_low = B219b(:,2);
+    w_high = B219b(:,3);
+    eb = zeros(b,8);
+    c1 = zeros(b,8);
+    for n = 1:8
+        for i = 1:b
+            eb(i,n) = sum( r(w_low(i)+1:w_high(i)+1).^2);
+            c1(i,n) = sum( c(w_low(i)+1:w_high(i)+1).*r(w_low(i)+1:w_high(i)+1).^2);
+        end
+    end
+    % Step 6: Calculation of ecb and ct
+    ecb = zeros(b,8);
+    ct = zeros(b,8);
+    bval = B219a(:,5);
+    bb=b;
+    for n = 1:8
+        for j=1:b
+            for i=1:bb
+                ecb(j,n) = ecb(j,n) + eb(i,n) * spreadingfun(i,j,bval);
+                ct(j,n) = ct(j,n) + cb(i,n) * spreadingfun(i,j,bval);
+            end
+        end
+    end
+    %Calculation of cb and en
+    cb(1:b,n) = ct(1:b,n)./ecb(1:b,n);
+    en = zeros(b,1);
+    norm_factor = zeros(b,1);
+    for j=1:b
+        for i=1:bb
+             norm_factor(i,1) = norm_factor(i,1) + spreadingfun(i,j,bval);
+        end
+        en(j,1) = ecb(j,1)./norm_factor(j,1);
+    end
 else
     %Step 2: Calculation of complex magnitudes and phases
     [r,f] = LONG_FFT(frameT);
@@ -68,10 +103,37 @@ else
     f_pred = 2*f1 - f2;
     %Step 4: Calculation of predictability matrix c
     c = sqrt( (r.*cos(f) - r_pred.*cos(f_pred) ).^2 +( r.*sin(f) - r_pred.*sin(f_pred) ).^2 ) ./ ( r + abs(r_pred) );
+    %Step 5: Calculation of eb and eb
     b = length(B219a);
     w_low = B219a(:,2);
     w_high = B219a(:,3);
+    eb = zeros(b,1);
+    c1 = zeros(b,1);
     for i = 1:b
-        e(i) = sum( r(w_low+
+        eb(i,1) = sum( r(w_low(i)+1:w_high(i)+1).^2);
+        c1(i,1) = sum( c(w_low(i)+1:w_high(i)+1).*r(w_low(i)+1:w_high(i)+1).^2);
+    end
+    %Step 6: Calculation of ecb and ct
+    ecb = zeros(b,1);
+    ct = zeros(b,1);
+    bval = B219a(:,5);
+    bb=b;
+    for j=1:b
+        for i=1:bb
+            ecb(j,1) = ecb(j,1) + eb(i,1) * spreadingfun(i,j,bval);
+            ct(j,1) = ct(j,1) + c1(i,1) * spreadingfun(i,j,bval);
+        end
+    end
+    %Calculation of cb and en
+    cb(1:b,1) = ct(1:b)./ecb(1:b);
+    en = zeros(b,1);
+    norm_factor = zeros(b,1);
+    for j=1:b
+        for i=1:bb
+             norm_factor(i,1) = norm_factor(i,1) + spreadingfun(i,j,bval);
+        end
+        en(j,1) = ecb(j,1)./norm_factor(j,1);
+    end
+    
 end
 

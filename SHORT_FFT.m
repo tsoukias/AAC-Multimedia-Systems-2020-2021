@@ -15,7 +15,7 @@ for i=0:7
     S(:,i+1) = frameT_center(i*128+1:i*128+256,:);
 end
 N = length(S);
-hann_win(1:N,1) = 0.5 - 0.5*(cos(pi/N*(1:N+0.5)));
+hann_win(1:N,1) = 0.5 - 0.5*(cos(pi/N*((0:N-1)+0.5)));
 Sw(:,1:8) = S(:,1:8).*hann_win;
 Sw_fft(:,1:8) = fft(Sw(:,1:8));
 r(1:128,1:8) = abs(Sw_fft(1:128,1:8));
