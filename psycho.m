@@ -1,40 +1,38 @@
-function SMR = psycho2(frameT, frameType, frameTprev1, frameTprev2)
-B219 = load('TableB219.mat');
-B219a = B219.B219a;
-B219b = B219.B219b; 
+function SMR = psycho(frameT, frameType, frameTprev1, frameTprev2)
+%Calculates the SMR of a given frame
+%Inputs:
+%frameT -> given frame for processing
+%frameType -> {OLS, LSS, ESH, LPS} 
+%frameTprev1 -> n-1 frame used for calculations of r_pred and f_pred
+%frameTprev2 -> n-2 frame used for calculations of r_pred and f_pred for
+%long frames only
+%
+%Output: 
+%SMR -> SMR of the given frame 
+%42x8 for short frame, 69x1 for long frame
 
+B219_all = load('TableB219.mat');
 if isequal(frameType, 'ESH')
     %% Step 2: Calculation of complex magnitudes and phases
     [r,f] = SHORT_FFT(frameT);
     [r_prev,f_prev] = SHORT_FFT(frameTprev1);
-    r1(:,1)=r_prev(:,8);
-    r2(:,1:2)=r_prev(:,7:8);
-    f1(:,1)=f_prev(:,8);
-    f2(:,1:2)=f_prev(:,7:8);
-    for i=1:7
-        r1(:,i+1) = r(:,i);
-        f1(:,i+1) = f(:,i);
-    end
-    for i=1:6
-        r2(:,i+2) = r(:,i);
-        f2(:,i+2) = f(:,i);
-    end
-    w_low = B219b(:,2);
-    w_high = B219b(:,3);
-    qthr(:,1) = B219b(:,6);    
-    b = length(B219b);
+    r1 = [r_prev(:,8) r(:,1:7)];
+    r2 = [r_prev(:,7:8) r(:,1:6)];
+    f1 = [f_prev(:,8) f(:,1:7)];
+    f2 = [f_prev(:,7:8) f(:,1:6)];
+    B219 = B219_all.B219b;
 else
     %% Step 2: Calculation of complex magnitudes and phases
     [r,f] = LONG_FFT(frameT);
     [r1,f1] = LONG_FFT(frameTprev1);
     [r2,f2] = LONG_FFT(frameTprev2);
-    
-    b = length(B219a);
-    w_low = B219a(:,2);
-    w_high = B219a(:,3);
-    qthr(:,1) = B219a(:,6);
+    B219 = B219_all.B219a;
 end
-
+b = length(B219);
+w_low = B219(:,2);
+w_high = B219(:,3);
+qthr(:,1) = B219(:,6);
+bval = B219(:,5);
 %% Step 3: Calculations of predictions for r and f
 r_pred = 2*r1 - r2;
 f_pred = 2*f1 - f2;
@@ -53,7 +51,7 @@ end
 %% Step 6: Calculation of ecb and ct
 ecb = zeros(b,N);
 ct = zeros(b,N);
-bval = B219a(:,5);
+
 bb=b;
 for n = 1:N
     for j=1:b
@@ -94,4 +92,3 @@ npart(1:b,1:N) = max(nb(1:b,1:N),qthr_hat(1:b,1:N));
 %% Step 10: Calculation of SMR
 SMR(1:b,1:N) = eb(1:b,1:N)./npart(1:b,1:N);
 end
-
