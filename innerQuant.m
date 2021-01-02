@@ -4,19 +4,15 @@ MagicNumber = 0.4054;
 b = length(a);
 S = zeros(k,N);
 X_hat = zeros(k,N);
-for j=1:b
-    for i=1:N
-        S(:,i) = sign(X(:,i)) .* round(abs(X(:,i))*2^(-1/4*a(j,i))^(3/4)+MagicNumber);
-        X_hat(:,i) = sign(S(:,i)) .* abs(S(:,i)).^(3/4) * 2^(1/4*a(j,i));
+Pe = zeros(b,N);
+for n=1:N
+    for i=1:b
+        S(w_low(i)+1:w_high(i)+1,n) = sign(X(w_low(i)+1:w_high(i)+1,n)).*round((abs(X(w_low(i)+1:w_high(i)+1,n))*2^(-1/4*a(i,n))).^(3/4) + MagicNumber);
+        X_hat(w_low(i)+1:w_high(i)+1,n) = sign(S(w_low(i)+1:w_high(i)+1,n)) .* abs(S(w_low(i)+1:w_high(i)+1,n)).^(4/3) * 2^(1/4*a(i,n));
+        Pe(i,n) = sum((X(w_low(i)+1:w_high(i)+1,n)-X_hat(w_low(i)+1:w_high(i)+1,n)).^2);
     end
 end
 
-Pe = zeros(b,N);
-for j=1:N
-    for i=1:b
-        Pe(i,j) = sum((X(w_low(i)+1:w_high(i)+1,j)-X_hat(w_low(i)+1:w_high(i)+1,j)).^2);
-    end
-end
 flag=1;
 for i=1:N
     for j=1:b-1
