@@ -4,9 +4,8 @@ function [S,Pe] = innerQuant(a,X,w_low,w_high)
 %X -> 1024x1 or 128x8 contains the MDCT coefficients 
 %w_low -> is taken from the B219 matrix for 48kHz
 %w_high -> is taken from the B219 matrix for 48kHz
-%Outputs: 
+Outputs: 
 %S -> 1024x1 quantization matrix
-%Pe -> 1024x1 error power 
 MagicNumber = 0.4054;
 [k,N] = size(X);
 b = length(a);

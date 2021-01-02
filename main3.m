@@ -30,7 +30,7 @@ B219_all = load('TableB219.mat');
 
 
 %% Preparation of input data
-index = 27;
+index = 10;
 frameT(:,1) = frame_W(index,:,1);
 frameType = AACSeq2(index).frameType;
 frameTprev1(:,1) = frame_W(index-1,:,1);
