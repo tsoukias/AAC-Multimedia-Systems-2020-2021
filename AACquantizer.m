@@ -23,11 +23,11 @@ T = P./SMR;
 MQ = 8191;
 a = zeros(b,N);
 for i=1:b
-    a(i,1:N) = 16/3 * log2(max(X(:,1:N)).^(3/4)/MQ);
+    a(i,1:N) = floor(16/3 * log2(max(X(:,1:N)).^(3/4)/MQ));
 end
 [S,Pe] = innerQuant(a,X,w_low,w_high);
-%% Loop
-while any(any(Pe<T)) && ~any(any(diff(a)>60))
+%% The most beautiful loop
+while any(any(Pe<T)) && ~any(any(diff(a)>59))
     add = Pe<T;
     a = a + add;
     [S,Pe] = innerQuant(a,X,w_low,w_high);
