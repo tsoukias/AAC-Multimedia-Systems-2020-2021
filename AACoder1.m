@@ -2,7 +2,7 @@ function [AACSeq1] = AACoder1(fNameIn)
 %% Preprocessing of the wav file
 [y, Fs] = audioread(fNameIn);
 %sound(y,Fs);
-y = y./max(abs(y));
+
 %% Create frames
 zero_padding = zeros(1024,2);
 N = length(y);

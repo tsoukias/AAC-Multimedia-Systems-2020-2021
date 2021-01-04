@@ -1,10 +1,9 @@
 function AACSeq3 = AACoder3(fNameIn, fnameAACoded)
 %% Load of B219 matrixes
 AACSeq2 = AACoder2(fNameIn);
-B219_all = load('TableB219.mat');
 %% Reading the audiofile
-[y, Fs] = audioread(fNameIn);
-y = y./max(abs(y));
+y = audioread(fNameIn);
+
 %% Create frames
 zero_padding = zeros(1024,2);
 N = length(y);
@@ -49,8 +48,8 @@ huffLUT = loadLUT();
 for i=1:length(AACSeq2)
     AACSeq3(i).frameType = AACSeq2(i).frameType;
     AACSeq3(i).winType = AACSeq2(i).winType;
-    AACSeq3(i).chl = AACSeq2(i).chl;
-    AACSeq3(i).chr = AACSeq2(i).chr;
+    AACSeq3(i).chl.TNScoeffs = AACSeq2(i).chl.TNScoeffs;
+    AACSeq3(i).chr.TNScoeffs = AACSeq2(i).chr.TNScoeffs;
     [Sl, sfcl, AACSeq3(i).chl.G] = AACquantizer(AACSeq2(i).chl.frameF, AACSeq3(i).frameType, SMR(i).left);
     [Sr, sfcr, AACSeq3(i).chr.G] = AACquantizer(AACSeq2(i).chr.frameF, AACSeq3(i).frameType, SMR(i).right);
     AACSeq3(i).chl.sfc = encodeHuff(sfcl(:), huffLUT, 12);

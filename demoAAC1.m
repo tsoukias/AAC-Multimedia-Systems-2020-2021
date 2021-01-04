@@ -8,7 +8,7 @@ function [SNR] = demoAAC1(fNameIn,fNameOut)
 % SNR -> 2x1 matrix with the SNR values channels 0 and 1 accordingly
 [y1] = audioread(fNameIn);
 AACSeq1 = AACoder1(fNameIn);
-y1 = y1./max(abs(y1));
+
 
 
 y2 = iAACoder1(AACSeq1,fNameOut);
