@@ -5,7 +5,6 @@ for(i=1:K)
     AACSeq2(i).chr.frameF = iTNS(AACSeq2(i).chr.frameF,AACSeq2(i).frameType,AACSeq2(i).chr.TNScoeffs);
 end
 song = iAACoder1(AACSeq2,fNameOut);
-audiowrite(fNameOut,song,48000);
 if nargout==1
     x=song;
 end

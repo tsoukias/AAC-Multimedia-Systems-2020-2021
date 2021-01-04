@@ -3,8 +3,9 @@ close all;
 clear all;
 %% Preprocessing of the wav file
 fNameIn = 'LicorDeCalandraca.wav';
-fnameAACoded = 1;
+fnameAACoded = 'AACSeq3';
 [y, Fs] = audioread(fNameIn);
+y = y./max(abs(y));
 %sound(y,Fs);
 
 %% Create frames
@@ -40,6 +41,16 @@ SMR = psycho(frameT, frameType, frameTprev1, frameTprev2);
 frameF_copy = iAACquantizer(S, sfc, G, frameType);
 
 tic;
-AACSeq3 = AACoder3(fNameIn, fnameAACoded);
+%AACSeq3 = AACoder3(fNameIn, fnameAACoded);
 toc;
 
+y2 = iAACoder3('AACSeq3.mat', 'stef3.wav');
+%y2 = y2./max(abs(y2));
+[y1, Fs] = audioread(fNameIn);
+signal_left = y1(:,1);
+signal_right = y1(:,2);
+noise_left = y1(:,1)-y2(:,1);
+noise_right = y1(:,2)-y2(:,2);
+fprintf('SNR for channel 0: %.2fdB\n', snr(signal_left,noise_left));
+fprintf('SNR for channel 1: %.2fdB\n', snr(signal_right,noise_right));
+SNR = [snr(signal_left,noise_left) snr(signal_right,noise_right)];

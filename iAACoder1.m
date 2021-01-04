@@ -21,6 +21,7 @@ for i=1:K
 end
 
 y(1:282978,:) = reconstructed_x(1025:282978+1024,:);
+y = y./max(abs(y));
 if nargout
     x=y;
 end

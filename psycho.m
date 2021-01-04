@@ -75,6 +75,13 @@ for n=1:N
 end
 %% Step 7: Calculation of tb
 tb(1:b,1:N) = -0.299 - 0.43.*log(cb(1:b,1:N));
+for i = 1:b
+    for j=1:N
+        if tb(i,j)<0
+            tb(i,j) =0.00001;
+        end
+    end
+end
 %% Step 8: Calculation of SNR
 NMT = 6;
 TMN = 18;

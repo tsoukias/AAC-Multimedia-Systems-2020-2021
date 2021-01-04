@@ -4,6 +4,7 @@ AACSeq2 = AACoder2(fNameIn);
 B219_all = load('TableB219.mat');
 %% Reading the audiofile
 [y, Fs] = audioread(fNameIn);
+y = y./max(abs(y));
 %% Create frames
 zero_padding = zeros(1024,2);
 N = length(y);
@@ -58,4 +59,5 @@ for i=1:length(AACSeq2)
     [AACSeq3(i).chr.stream, AACSeq3(i).chr.codebook] = encodeHuff(Sr, huffLUT);
     
 end
+save(fnameAACoded, 'AACSeq3');
 end
