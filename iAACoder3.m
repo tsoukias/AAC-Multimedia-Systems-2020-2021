@@ -1,5 +1,5 @@
 function x = iAACoder3(AACSeq3, fNameOut)
-load(AACSeq3);
+%load(AACSeq3);
 K = length(AACSeq3);
 
 huffLUT = loadLUT();
