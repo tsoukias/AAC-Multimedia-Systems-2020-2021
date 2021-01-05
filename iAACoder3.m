@@ -1,4 +1,11 @@
 function x = iAACoder3(AACSeq3, fNameOut)
+%Makes the decoding of Step 3
+%Input:
+%AACSeq3 -> struct as defined in the mm-hw-2021.pdf file
+%fNameOut -> '*.wav' name file of the decoded wav audio with Fs = 48kHz
+%Output:
+%x -> is the decoded signal
+
 %load(AACSeq3);
 K = length(AACSeq3);
 

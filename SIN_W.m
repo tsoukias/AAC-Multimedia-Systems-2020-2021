@@ -1,4 +1,9 @@
 function [w] = SIN_W(N,part)
+%Inputs:
+%N -> size of the window to be created
+%part -> can be {left,right,all}
+%Output:
+%w -> window
 w_temp = zeros(N,2);
 for n = 1:N
     w_temp(n,:) = sin(pi/N*((n-1)+1/2));

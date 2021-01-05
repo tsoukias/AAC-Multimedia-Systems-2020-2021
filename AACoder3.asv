@@ -2,9 +2,9 @@ function AACSeq3 = AACoder3(fNameIn, fnameAACoded)
 %Makes the coding of Step 3
 %Input:
 %fNameIn -> '*.wav' name file of an wav audio with Fs = 48kHz
-%fnameAACoded -> '*.mat' file of the AACSeq3 struct
+%fnameAACoded -> '*.mat' file with the AACSeq3 
 %Output:
-%AACSeq3 -> struct as defined in the mm-hw-2021.pdf file
+%AACSeq1 -> struct as defined in the mm-hw-2021.pdf file
 %% Load of B219 matrixes
 AACSeq2 = AACoder2(fNameIn);
 %% Reading the audiofile

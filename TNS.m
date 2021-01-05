@@ -1,15 +1,12 @@
 function [frameFout,TNScoeffs] = TNS(frameFin,frameType)
 %Inputs:
-%frameFin ->    can either be 1024x1 or 128x8 for Long or Short Frame
-%               accordingly
-%
+%frameFin ->    can either be 1024x1 or 128x8 for Long or Short Frame 
+%accordingly
 %frameType ->   can be {'OLS','LSS','ESH','LPS'}
 
 %Outputs:
 %frameFout ->   FIR filtered frameFin according to Temporal Noise Shaping
-%               can either be 1024x1 or 128x8 for Long or Short Frame
-%               accordingly
-%                         
+%can either be 1024x1 or 128x8 for Long or Short Frame accordingly
 %TNSCoeffs ->   Coefficients of the FIR filter. Compulsory for iTNS.
 %
 %IMPORTANT: FOR THE OPERATION OF THE FUNCTION TableB219.mat MUST BE USED.

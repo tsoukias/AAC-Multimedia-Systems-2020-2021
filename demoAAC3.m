@@ -1,5 +1,14 @@
 function [SNR, bitrate, compression] = demoAAC3(fNameIn, fNameOut, frameAACoded)
-
+% Function for demonstation of the AAC encoding-decoding process with TNS
+% Inputs:
+% fNameIn -> name of the input audiofile 
+% fNameOut -> name of the output audiofile
+% frameAACoded -> '*.mat' file of the AACSeq3 struct
+% Output:
+% SNR -> 2x1 matrix with the SNR values channels 0 and 1 accordingly
+% bitrate -> 2x1 matrix with the bitrate before and after compression in
+% bits/s
+% compression -> contains the compression ratio
 AACSeq3 = AACoder3(fNameIn, frameAACoded);
 
 y2 = iAACoder3(AACSeq3, fNameOut);

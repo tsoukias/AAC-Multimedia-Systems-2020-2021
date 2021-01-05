@@ -1,4 +1,12 @@
 function frameF = iAACquantizer(S, sfc, G, frameType)
+%The function applies the inverse procedure of AACquantizer() function
+%Inputs:
+%S -> result of the quantizer 
+%sfc -> scale factors of the frame after DPCM
+%G -> gain factor of the frame 
+%frameType-> can be {'OLS', 'LSS', 'ESH', 'LPS'} 
+%Output: 
+%frameF -> Approximation of the frameF before the AACQuantizer 
 B219_all = load('TableB219.mat');
 if isequal(frameType, 'ESH')
     B219 = B219_all.B219b;

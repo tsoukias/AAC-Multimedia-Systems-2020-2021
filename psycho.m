@@ -8,7 +8,7 @@ function SMR = psycho(frameT, frameType, frameTprev1, frameTprev2)
 %long frames only
 %
 %Output: 
-%SMR -> SMR of the given frame 
+%SMR -> Signal to Mask Ratio of the given frame 
 %42x8 for short frame, 69x1 for long frame
 
 B219_all = load('TableB219.mat');

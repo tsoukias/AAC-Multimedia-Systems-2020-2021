@@ -1,4 +1,14 @@
 function [S, sfc, G] = AACquantizer(frameF, frameType, SMR)
+%The function is responsible for the quantization proccess of the MDCT
+%coefficients using the thresholds computed from the psychoacoustic model
+%Inputs: 
+%frameF -> MDCT coefficients of the current frame
+%frameType -> can be {'OLS', 'LSS', 'ESH', 'LPS'} 
+%SMR -> Signal to Mask Ratio of the frame
+%Outputs:
+%S -> result of the quantizer 
+%sfc -> scale factors of the frame after DPCM
+%G -> gain factor of the frame 
 X = frameF;
 B219_all = load('TableB219.mat');
 if isequal(frameType, 'ESH')
@@ -27,7 +37,7 @@ for i=1:b
 end
 [S,Pe] = innerQuant(a,X,w_low,w_high);
 %% The most beautiful loop
-while any(any(Pe<T)) && ~any(any(diff(a)>59))
+while any(any(Pe<T)) && ~any(any(diff(a)>=60))
     add = Pe<T;
     a = a + add;
     [S,Pe] = innerQuant(a,X,w_low,w_high);

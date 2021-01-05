@@ -1,4 +1,9 @@
 function [AACSeq2] = AACoder2(fNameIn)
+%Makes the coding of Step 2
+%Input:
+%fNameIn -> '*.wav' name file of an wav audio with Fs = 48kHz
+%Output:
+%AACSeq2 -> struct as defined in the mm-hw-2021.pdf file
 AACSeq1 = AACoder1(fNameIn);
 K = length(AACSeq1);
 for i=1:K

@@ -1,4 +1,13 @@
 function frameF = filterbank(frameT, frameType, winType)
+%Inputs:
+%frameT -> frame to be converted with mdct transformation
+%frameType -> can be {'OLS', 'LSS', 'ESH', 'LPS'} 
+%winType -> can be {'SIN', 'KBD'}
+%Output:
+%frameF -> The frame is being converted and the mdct coefficent are
+%extracted based on the frameType and the winType
+
+%Also check SIN_W,KBD and mdct functions
 
 switch frameType
     case 'OLS'
@@ -72,10 +81,7 @@ switch frameType
                     frameF(i*128+1:i*128+128,2) = mdct(subframeT(:,2));
                 end
         end
-        
 end
-
-    
 end
 
 

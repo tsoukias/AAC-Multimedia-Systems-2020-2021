@@ -1,4 +1,13 @@
 function [frameT] = iFilterbank(frameF, frameType, winType)
+%Inputs:
+%frameF -> mdct frame to be converted  
+%frameType -> can be {'OLS', 'LSS', 'ESH', 'LPS'} 
+%winType -> can be {'SIN', 'KBD'}
+%Output:
+%frameT -> The inverse procedure of the filterbank() function is applied to
+%calculate the frameT
+
+%Also check SIN_W,KBD and imdct functions
 switch frameType
     case 'OLS'
         w = zeros(2048,2);

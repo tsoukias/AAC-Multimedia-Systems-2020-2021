@@ -1,9 +1,11 @@
 function [AACSeq1] = AACoder1(fNameIn)
-%% Preprocessing of the wav file
-[y, Fs] = audioread(fNameIn);
-%sound(y,Fs);
-
+%Makes the coding of Step 1
+%Input:
+%fNameIn -> '*.wav' name file of an wav audio with Fs = 48kHz
+%Output:
+%AACSeq1 -> struct as defined in the mm-hw-2021.pdf file
 %% Create frames
+[y, Fs] = audioread(fNameIn);
 zero_padding = zeros(1024,2);
 N = length(y);
 y1 = zeros(1024-mod(N,1024),2);
