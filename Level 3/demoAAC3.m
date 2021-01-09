@@ -10,12 +10,12 @@ function [SNR, bitrate, compression] = demoAAC3(fNameIn, fNameOut, frameAACoded)
 % bits/s
 % compression -> contains the compression ratio
 AACSeq3 = AACoder3(fNameIn, frameAACoded);
-
-y2 = iAACoder3(AACSeq3, fNameOut);
-%y2 = y2./max(abs(y2));
 [y1, Fs] = audioread(fNameIn);
 N = length(y1);
 duration = N/Fs;
+y = iAACoder3(AACSeq3, fNameOut);
+y2(1:length(y1),:)= y(1:length(y1),:);
+%y2 = y2./max(abs(y2));
 % Calculation of SNRs
 signal_left = y1(:,1);
 signal_right = y1(:,2);
@@ -28,7 +28,23 @@ info_uncomp = dir(fNameIn);
 size_uncomp = info_uncomp.bytes*8;
 bitrate_uncomp = size_uncomp/duration;
 
-info_comp = dir('AACSeq3.mat');
+%% Ignoring all the unnecessary objects
+for i=1:length(AACSeq3)
+    AACSeqCount(i).frameType = AACSeq3(i).frameType;
+    AACSeqCount(i).winType = AACSeq3(i).winType;
+    AACSeqCount(i).chl.stream = AACSeq3(i).chl.stream;
+    AACSeqCount(i).chl.G = AACSeq3(i).chl.G;
+    AACSeqCount(i).chl.TNScoeffs = AACSeq3(i).chl.TNScoeffs;
+    AACSeqCount(i).chl.sfc = AACSeq3(i).chl.sfc;
+    AACSeqCount(i).chl.codebook = AACSeq3(i).chl.codebook;
+    AACSeqCount(i).chr.stream = AACSeq3(i).chr.stream;
+    AACSeqCount(i).chr.G = AACSeq3(i).chr.G;
+    AACSeqCount(i).chr.TNScoeffs = AACSeq3(i).chr.TNScoeffs;
+    AACSeqCount(i).chr.sfc = AACSeq3(i).chr.sfc;
+    AACSeqCount(i).chr.codebook = AACSeq3(i).chr.codebook;
+end
+save('countme.mat', 'AACSeqCount');
+info_comp = dir('countme.mat');
 size_comp = info_comp.bytes*8;
 bitrate_comp = size_comp/duration;
 

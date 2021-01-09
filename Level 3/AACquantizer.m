@@ -1,4 +1,4 @@
-function [S, sfc, G] = AACquantizer(frameF, frameType, SMR)
+function [S, sfc, G, T] = AACquantizer(frameF, frameType, SMR)
 %The function is responsible for the quantization proccess of the MDCT
 %coefficients using the thresholds computed from the psychoacoustic model
 %Inputs: 
@@ -28,7 +28,7 @@ for j=1:N
         P(i,j) = sum(X(w_low(i)+1:w_high(i)+1,j).^2);
     end
 end
-T = P./SMR;
+T1 = P./SMR;
 %% Steps 1-2: Calculation of a,S and X_hat and Pe
 MQ = 8191;
 a = zeros(b,N);
@@ -37,8 +37,8 @@ for i=1:b
 end
 [S,Pe] = innerQuant(a,X,w_low,w_high);
 %% The most beautiful loop
-while any(any(Pe<T)) && ~any(any(diff(a)>=60))
-    add = Pe<T;
+while any(any(Pe<T1)) && ~any(any(diff(a)>=60))
+    add = Pe<T1;
     a = a + add;
     [S,Pe] = innerQuant(a,X,w_low,w_high);
 end
@@ -46,4 +46,7 @@ G(1,1:N) = a(1,1:N);
 sfc(1,:) = G;
 sfc(2:b,:) = diff(a);
 S = reshape(S, [1024,1]);
+if nargout==4
+    T = T1;
+end
 end

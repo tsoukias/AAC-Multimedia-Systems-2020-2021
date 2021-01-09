@@ -1,5 +1,5 @@
-function [SNR] = demoAAC1(fNameIn,fNameOut)
-% Function for demonstation of the AAC encoding-decoding process
+function [SNR] = demoAAC2(fNameIn,fNameOut)
+% Function for demonstation of the AAC encoding-decoding process with TNS
 % Inputs:
 % fNameIn -> name of the input audiofile 
 % fNameOut -> name of the output audiofile
@@ -7,13 +7,10 @@ function [SNR] = demoAAC1(fNameIn,fNameOut)
 % Output:
 % SNR -> 2x1 matrix with the SNR values channels 0 and 1 accordingly
 [y1] = audioread(fNameIn);
-AACSeq1 = AACoder1(fNameIn);
+AACSeq2 = AACoder2(fNameIn);
 
-
-
-y2 = iAACoder1(AACSeq1,fNameOut);
-
-
+y = iAACoder2(AACSeq2,fNameOut);
+y2(1:length(y1),:)= y(1:length(y1),:);
 signal_left = y1(:,1);
 signal_right = y1(:,2);
 noise_left = y1(:,1)-y2(:,1);

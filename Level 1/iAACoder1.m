@@ -9,7 +9,7 @@ function [x] = iAACoder1(AACSeq1,fNameOut)
 Fs = 48000;
 K = length(AACSeq1);
 frameT = zeros(K,2048,2);
-reconstructed_x = zeros(282624+4096,2);
+reconstructed_x = zeros(K*1024+2048,2);
 for i=1:K
     if isequal(AACSeq1(i).frameType, 'ESH')
         for n = 0:7
@@ -27,8 +27,8 @@ for i=1:K
     
 end
 
-y(1:282978,:) = reconstructed_x(1025:282978+1024,:);
-
+y(:,:) = reconstructed_x(1025:end,:);
+%y = y./max(abs(y));
 if nargout
     x=y;
 end

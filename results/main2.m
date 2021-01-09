@@ -4,5 +4,5 @@ clear all;
 
 
 fNameIn = 'LicorDeCalandraca.wav';
-fNameOut = 'stef2.wav';
+fNameOut = 'out2.wav';
 SNR = demoAAC2(fNameIn,fNameOut);

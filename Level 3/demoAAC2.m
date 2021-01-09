@@ -9,7 +9,8 @@ function [SNR] = demoAAC2(fNameIn,fNameOut)
 [y1] = audioread(fNameIn);
 AACSeq2 = AACoder2(fNameIn);
 
-y2 = iAACoder2(AACSeq2,fNameOut);
+y = iAACoder2(AACSeq2,fNameOut);
+y2(1:length(y1),:)= y(1:length(y1),:);
 signal_left = y1(:,1);
 signal_right = y1(:,2);
 noise_left = y1(:,1)-y2(:,1);

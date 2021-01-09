@@ -4,6 +4,5 @@ clear all;
 
 fNameIn = 'LicorDeCalandraca.wav';
 frameAACoded = 'AACSeq3';
-fNameOut = 'stef3.wav';
+fNameOut = 'out.wav';
 [SNR, bitrate, compression] = demoAAC3(fNameIn, fNameOut, frameAACoded);
-load('AACSeq3');
